@@ -18,12 +18,21 @@ class PurchaseService
     {
         $purchase = Purchase::find($id);
 
+        if (!$purchase) {
+            throw new \Exception('Purchase not found');
+        }
+
         return ['purchase' => $purchase];
     }
 
     public function updatePurchase($id, array $validatedData)
     {
         $purchase = Purchase::find($id);
+
+        if (!$purchase) {
+            throw new \Exception('Purchase not found');
+        }
+
         $purchase->update($validatedData);
     }
 
@@ -42,12 +51,22 @@ class PurchaseService
     public function destroyPurchase($id)
     {
         $purchase = Purchase::find($id);
+
+        if (!$purchase) {
+            throw new \Exception('Purchase not found');
+        }
+
         $purchase->delete();
     }
 
     public function switchStatus(array $validatedData, $id)
     {
         $purchase = Purchase::find($id);
+
+        if (!$purchase) {
+            throw new \Exception('Purchase not found');
+        }
+
         $validatedData['status'] = $validatedData['status'] == 'new' ? 'complited' :  'new';
         $purchase->update($validatedData);
     }

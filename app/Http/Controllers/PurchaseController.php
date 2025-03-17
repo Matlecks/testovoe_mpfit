@@ -25,54 +25,76 @@ class PurchaseController extends Controller
 
     public function show($id)
     {
-        $data = $this->purchaseService->getPurchase($id);
+        try {
+            $data = $this->purchaseService->getPurchase($id);
 
-        return view('pages.purchases.show', $data);
+            return view('pages.purchases.show', $data);
+        } catch (\Exception $e) {
+            return redirect()->route('purchase.index')->with('error', $e->getMessage());
+        }
     }
 
     public function edit($id)
     {
-        $data = $this->purchaseService->getPurchase($id);
+        try {
+            $data = $this->purchaseService->getPurchase($id);
 
-        return view('pages.purchases.edit', $data);
+            return view('pages.purchases.edit', $data);
+        } catch (\Exception $e) {
+            return redirect()->route('purchase.index')->with('error', $e->getMessage());
+        }
     }
 
     public function update(UpdatePurchaseRequest $request, $id)
     {
         $validated = $request->validated();
 
-        $this->purchaseService->updatePurchase($id, $validated);
+        try {
+            $this->purchaseService->updatePurchase($id, $validated);
 
-        $message = "Заказ отредактирован";
-        return redirect()->route('purchase.index')->with('message', $message);
+            $message = "Заказ отредактирован";
+            return redirect()->route('purchase.index')->with('message', $message);
+        } catch (\Exception $e) {
+            return redirect()->route('purchase.index')->with('error', $e->getMessage());
+        }
     }
 
     public function store(StorePurchaseRequest $request)
     {
         $validated = $request->validated();
 
-        $this->purchaseService->storePurchase($validated);
+        try {
+            $this->purchaseService->storePurchase($validated);
 
-        $message = "Заказ создан";
-        return redirect()->route('product.index')->with('message', $message);
+            $message = "Заказ создан";
+            return redirect()->route('product.index')->with('message', $message);
+        } catch (\Exception $e) {
+            return redirect()->route('product.index')->with('error', $e->getMessage());
+        }
     }
 
     public function destroy($id)
     {
-        $this->purchaseService->destroyPurchase($id);
-
-        $message = "Заказ удален";
-        return redirect()->route('product.index')->with('message', $message);
+        try {
+            $this->purchaseService->destroyPurchase($id);
+            $message = "Заказ удален";
+            return redirect()->route('purchase.index')->with('message', $message);
+        } catch (\Exception $e) {
+            return redirect()->route('purchase.index')->with('error', $e->getMessage());
+        }
     }
 
     public function switchStatus(SwitchStatusPurchaseRequest $request, $id)
     {
         $validated = $request->validated();
 
-        $this->purchaseService->switchStatus($validated, $id);
+        try {
+            $this->purchaseService->switchStatus($validated, $id);
 
-        $message = "Заказ создан";
-        return redirect()->route('purchase.index')->with('message', $message);
-
+            $message = "Заказ создан";
+            return redirect()->route('purchase.index')->with('message', $message);
+        } catch (\Exception $e) {
+            return redirect()->route('purchase.index')->with('error', $e->getMessage());
+        }
     }
 }

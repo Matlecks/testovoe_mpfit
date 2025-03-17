@@ -25,26 +25,38 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $data = $this->productService->getProduct($id);
+        try {
+            $data = $this->productService->getProduct($id);
 
-        return view('pages.products.show', $data);
+            return view('pages.products.show', $data);
+        } catch (\Exception $e) {
+            return redirect()->route('product.index')->with('error', $e->getMessage());
+        }
     }
 
     public function edit($id)
     {
-        $data = $this->productService->getProduct($id);
+        try {
+            $data = $this->productService->getProduct($id);
 
-        return view('pages.products.edit', $data);
+            return view('pages.products.edit', $data);
+        } catch (\Exception $e) {
+            return redirect()->route('product.index')->with('error', $e->getMessage());
+        }
     }
 
     public function update(UpdateProductRequest $request, $id)
     {
         $validated = $request->validated();
 
-        $this->productService->updateProduct($id, $validated);
+        try {
+            $this->productService->updateProduct($id, $validated);
 
-        $message = "Товар отредактирован";
-        return redirect()->route('product.index')->with('message', $message);
+            $message = "Товар отредактирован";
+            return redirect()->route('product.index')->with('message', $message);
+        } catch (\Exception $e) {
+            return redirect()->route('product.index')->with('error', $e->getMessage());
+        }
     }
 
     public function create()
@@ -59,17 +71,25 @@ class ProductController extends Controller
     {
         $validated = $request->validated();
 
-        $this->productService->storeProduct($validated);
+        try {
+            $this->productService->storeProduct($validated);
 
-        $message = "Товар создан";
-        return redirect()->route('product.index')->with('message', $message);
+            $message = "Товар создан";
+            return redirect()->route('product.index')->with('message', $message);
+        } catch (\Exception $e) {
+            return redirect()->route('product.index')->with('error', $e->getMessage());
+        }
     }
 
     public function destroy($id)
     {
-        $this->productService->destroyProduct($id);
+        try {
+            $this->productService->destroyProduct($id);
 
-        $message = "Товар удален";
-        return redirect()->route('product.index')->with('message', $message);
+            $message = "Товар удален";
+            return redirect()->route('product.index')->with('message', $message);
+        } catch (\Exception $e) {
+            return redirect()->route('product.index')->with('error', $e->getMessage());
+        }
     }
 }

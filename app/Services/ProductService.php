@@ -17,7 +17,15 @@ class ProductService
     {
         $product = Product::find($id);
 
+        if (!$product) {
+            throw new \Exception('Product not found');
+        }
+
         $categories = Category::where('id', '!=', $product->category->id)->get();
+
+        if (!$categories) {
+            throw new \Exception('Categories not found');
+        }
 
         return ['product' => $product, 'categories' => $categories];
     }
@@ -25,6 +33,11 @@ class ProductService
     public function updateProduct($id, array $validatedData)
     {
         $product = Product::find($id);
+
+        if (!$product) {
+            throw new \Exception('Product not found');
+        }
+
         $product->update($validatedData);
     }
 
@@ -41,6 +54,11 @@ class ProductService
     public function destroyProduct($id)
     {
         $product = Product::find($id);
+
+        if (!$product) {
+            throw new \Exception('Product not found');
+        }
+
         $product->delete();
     }
 }
